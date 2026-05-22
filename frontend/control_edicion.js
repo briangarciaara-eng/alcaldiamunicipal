@@ -8,11 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const esModoEdicion = params.get('modo') === 'editar';
 
     if (!esModoEdicion) {
-        const editables = document.querySelectorAll('[contenteditable="true"]');
-        editables.forEach(el => el.setAttribute('contenteditable', 'false'));
-
-        const imagenesEditables = document.querySelectorAll('img[onclick*="cambiarImagenVisual"]');
-        imagenesEditables.forEach(img => {
+        document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+            el.setAttribute('contenteditable', 'false');
+        });
+        document.querySelectorAll('img[onclick*="cambiarImagenVisual"]').forEach(img => {
             img.removeAttribute('onclick');
             img.style.cursor = 'default';
         });
@@ -36,8 +35,6 @@ function previsualizarNuevaImagen(input, idImg) {
 }
 
 // ==========================================================================
-// CONTROL DE EDICIÓN VISUAL HÍBRIDO - ALCALDÍA LOCAL MUNICIPAL
-// ==========================================================================
 const urlParams = new URLSearchParams(window.location.search);
 const modoEditarActivo = urlParams.get('modo') === 'editar';
 
@@ -50,16 +47,20 @@ if (!modoEditarActivo) {
         imagen.style.cursor = 'default';
     });
 } else {
-    // ==========================================================================
-    // MODO EDICIÓN ACTIVO
-    // ==========================================================================
     const panelExistente = document.getElementById('panel-guardado-local');
     if (panelExistente) panelExistente.remove();
+
+    const esLocal = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1';
+
+    const labelBoton = esLocal 
+        ? '💾 Guardar en Disco (Local)' 
+        : '💾 Sincronizar con GitHub';
 
     const contenedorBotonesHTML = `
         <div id="panel-guardado-local" style="position:fixed; bottom:30px; left:30px; display:flex; gap:12px; z-index:9999; font-family:Arial, sans-serif;">
             <button id="btn-sincronizar-fast" style="padding:12px 20px; background:#28a745; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition: background 0.2s;">
-                💾 Sincronizar con GitHub
+                ${labelBoton}
             </button>
             <button id="btn-descargar-backup" style="padding:12px 20px; background:#007bff; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition: background 0.2s;">
                 📥 Descargar HTML (Respaldo)
@@ -77,49 +78,30 @@ if (!modoEditarActivo) {
         let clonDocumento = document.documentElement.cloneNode(true);
         let panelEnClon = clonDocumento.querySelector('#panel-guardado-local');
         if (panelEnClon) panelEnClon.remove();
-
-        clonDocumento.querySelectorAll('[contenteditable="true"]').forEach(elemento => {
-            elemento.setAttribute('contenteditable', 'false');
+        clonDocumento.querySelectorAll('[contenteditable="true"]').forEach(el => {
+            el.setAttribute('contenteditable', 'false');
         });
-        clonDocumento.querySelectorAll('img[onclick]').forEach(imagen => {
-            imagen.removeAttribute('onclick');
-            imagen.style.cursor = 'default';
+        clonDocumento.querySelectorAll('img[onclick]').forEach(img => {
+            img.removeAttribute('onclick');
+            img.style.cursor = 'default';
         });
-
         return "<!DOCTYPE html>\n" + clonDocumento.outerHTML;
     }
 
-    // ==========================================================================
-    // BOTÓN VERDE: SINCRONIZAR CON GITHUB VÍA API
-    // ==========================================================================
+    // ── BOTÓN VERDE ────────────────────────────────────────────
     document.getElementById('btn-sincronizar-fast').addEventListener('click', async () => {
         const btnSincro = document.getElementById('btn-sincronizar-fast');
         const panelGlobal = document.getElementById('panel-guardado-local');
 
         btnSincro.style.background = "#e0a800";
-        btnSincro.innerText = "⏳ Sincronizando...";
+        btnSincro.innerText = "⏳ Guardando...";
         btnSincro.disabled = true;
 
-        // Ocultamos el panel para no incluirlo en el HTML capturado
         panelGlobal.style.display = 'none';
         const codigoVivo = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
         panelGlobal.style.display = 'flex';
 
         try {
-            // Primero verificamos que la API responde (diagnóstico)
-            const pingResp = await fetch('/api/ping').catch(() => null);
-            if (!pingResp || !pingResp.ok) {
-                throw new Error(`API no responde en /api/ping. 
-Verifica que vercel.json apunte a api/index.py`);
-            }
-            const pingData = await pingResp.json();
-            console.log("🔍 Diagnóstico API:", pingData);
-
-            if (pingData.github_token === "❌ falta") {
-                throw new Error("GITHUB_TOKEN no está configurado en Vercel.\nVe a: Vercel → Settings → Environment Variables");
-            }
-
-            // Llamada principal
             const respuesta = await fetch('/api/guardar-html', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -133,28 +115,27 @@ Verifica que vercel.json apunte a api/index.py`);
 
             if (respuesta.ok) {
                 btnSincro.style.background = "#155724";
-                btnSincro.innerText = "✅ ¡Sincronizado con GitHub!";
-                console.log("✅ Éxito:", resultado);
+                btnSincro.innerText = esLocal ? "✅ ¡Guardado en disco!" : "✅ ¡Sincronizado con GitHub!";
+                console.log("✅ Éxito:", resultado.message);
                 setTimeout(() => {
                     btnSincro.style.background = "#28a745";
-                    btnSincro.innerText = "💾 Sincronizar con GitHub";
+                    btnSincro.innerText = labelBoton;
                 }, 3000);
             } else {
                 throw new Error(resultado.detail || `HTTP ${respuesta.status}`);
             }
 
         } catch (error) {
-            console.error("❌ Error de sincronización:", error);
-            // Mostramos el error REAL en lugar del mensaje genérico
-            alert(`❌ Error al sincronizar:\n\n${error.message}\n\nRevisa la consola del navegador (F12) para más detalles.`);
+            console.error("❌ Error:", error);
+            alert(`❌ Error al guardar:\n\n${error.message}`);
             btnSincro.style.background = "#28a745";
-            btnSincro.innerText = "💾 Sincronizar con GitHub";
+            btnSincro.innerText = labelBoton;
         } finally {
             btnSincro.disabled = false;
         }
     });
 
-    // BOTÓN AZUL: DESCARGA LOCAL
+    // ── BOTÓN AZUL ─────────────────────────────────────────────
     document.getElementById('btn-descargar-backup').addEventListener('click', () => {
         const panelGlobal = document.getElementById('panel-guardado-local');
         panelGlobal.style.display = 'none';

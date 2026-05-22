@@ -1,10 +1,11 @@
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from mangum import Mangum
 
-app = FastAPI()
+app = FastAPI(title="Servidor - Alcaldía Municipal")
 
 app.add_middleware(
     CORSMiddleware,
@@ -13,6 +14,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 
 class SincronizacionHTML(BaseModel):
     archivo: str
@@ -39,13 +43,23 @@ async def guardar_html(data: SincronizacionHTML):
     RAMA = os.getenv("GITHUB_BRANCH", "main")
     RUTA_EN_REPO = f"frontend/{archivo_limpio}"
 
+    # ── MODO LOCAL: guarda directamente en disco ──────────────
+    if not os.getenv("VERCEL") and not os.getenv("VERCEL_ENV"):
+        ruta_destino = os.path.join(FRONTEND_DIR, archivo_limpio)
+        try:
+            with open(ruta_destino, "w", encoding="utf-8") as f:
+                f.write(data.html)
+            return {"status": "success", "message": f"✅ Guardado local: {archivo_limpio}"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    # ── MODO VERCEL: sincroniza con GitHub ────────────────────
     if not TOKEN:
         raise HTTPException(status_code=500, detail="Falta GITHUB_TOKEN en Vercel.")
 
     try:
         from github import Github, Auth, GithubException
 
-        # Usamos la nueva API de autenticación (evita el DeprecationWarning)
         auth = Auth.Token(TOKEN)
         g = Github(auth=auth)
         repo = g.get_repo(REPO_NAME)
@@ -78,5 +92,20 @@ async def guardar_html(data: SincronizacionHTML):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-# ── HANDLER PARA VERCEL (CRÍTICO) ──────────────────────────
-handler = Mangum(app)
+# ── ARCHIVOS ESTÁTICOS (solo local) ───────────────────────────
+@app.get("/")
+async def leer_index():
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+
+if not os.getenv("VERCEL") and not os.getenv("VERCEL_ENV"):
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
+# ── MANGUM (solo Vercel) ──────────────────────────────────────
+if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
+    from mangum import Mangum
+    handler = Mangum(app)
+
+# ── LOCAL ─────────────────────────────────────────────────────
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
