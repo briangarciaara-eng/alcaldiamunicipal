@@ -36,7 +36,7 @@ function previsualizarNuevaImagen(input, idImg) {
 }
 
 // ==========================================================================
-// CONTROL DE EDICIÓN VISUAL HÍBRIDO - ALCALDÍA LOCAL MUNICIPAL
+// CONTROL DE EDICIÓN VISUAL HÍBRIDO - ALCALDÍA LOCAL MUNICIPAL (PORTÁTIL)
 // ==========================================================================
 const urlParams = new URLSearchParams(window.location.search);
 const modoEditarActivo = urlParams.get('modo') === 'editar';
@@ -51,24 +51,27 @@ if (!modoEditarActivo) {
     });
 } else {
     // ==========================================================================
-    // MODO EDICIÓN ACTIVO
+    // MODO EDICIÓN ACTIVO: INYECTAR BOTONES DE CONTROL DUAL
     // ==========================================================================
     const panelExistente = document.getElementById('panel-guardado-local');
     if (panelExistente) panelExistente.remove();
 
     const contenedorBotonesHTML = `
-        <div id="panel-guardado-local" style="position:fixed; bottom:30px; left:30px; display:flex; gap:12px; z-index:9999; font-family:Arial, sans-serif;">
+        <div id="panel-guardado-local" style="position:fixed; bottom:30px; left:30px; display:flex; gap:12px; z-index:1000; font-family:Arial, sans-serif;">
             <button id="btn-sincronizar-fast" style="padding:12px 20px; background:#28a745; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition: background 0.2s;">
-                💾 Sincronizar con GitHub
+                💾 Sincronizar Tilde/Cambio (Python)
             </button>
             <button id="btn-descargar-backup" style="padding:12px 20px; background:#007bff; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition: background 0.2s;">
-                📥 Descargar HTML (Respaldo)
+                📥 Descargar HTML Completo (Respaldo)
             </button>
         </div>
     `;
-
+    
+    // Inyección blindada: intenta en el body, si no, en el documento general
     if (document.body) {
         document.body.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
+    } else {
+        document.documentElement.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
     }
 
     const nombreArchivo = window.location.pathname.split("/").pop() || "index.html";
@@ -90,71 +93,53 @@ if (!modoEditarActivo) {
     }
 
     // ==========================================================================
-    // BOTÓN VERDE: SINCRONIZAR CON GITHUB VÍA API
+    // LÓGICA BOTÓN VERDE: CON ANIMACIÓN VISUAL RESTAURADA
     // ==========================================================================
     document.getElementById('btn-sincronizar-fast').addEventListener('click', async () => {
         const btnSincro = document.getElementById('btn-sincronizar-fast');
         const panelGlobal = document.getElementById('panel-guardado-local');
 
+        // Activamos animación de espera
         btnSincro.style.background = "#e0a800";
         btnSincro.innerText = "⏳ Sincronizando...";
         btnSincro.disabled = true;
 
-        // Ocultamos el panel para no incluirlo en el HTML capturado
+        // Ocultamos temporalmente para tomar la foto limpia
         panelGlobal.style.display = 'none';
-        const codigoVivo = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const codigoVivoSinBotones = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
         panelGlobal.style.display = 'flex';
 
         try {
-            // Primero verificamos que la API responde (diagnóstico)
-            const pingResp = await fetch('/api/ping').catch(() => null);
-            if (!pingResp || !pingResp.ok) {
-                throw new Error(`API no responde en /api/ping. 
-Verifica que vercel.json apunte a api/index.py`);
-            }
-            const pingData = await pingResp.json();
-            console.log("🔍 Diagnóstico API:", pingData);
-
-            if (pingData.github_token === "❌ falta") {
-                throw new Error("GITHUB_TOKEN no está configurado en Vercel.\nVe a: Vercel → Settings → Environment Variables");
-            }
-
-            // Llamada principal
             const respuesta = await fetch('/api/guardar-html', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     archivo: nombreArchivo,
-                    html: codigoVivo
+                    html: codigoVivoSinBotones
                 })
             });
 
-            const resultado = await respuesta.json().catch(() => ({ detail: "Respuesta no es JSON" }));
-
             if (respuesta.ok) {
+                // Éxito: Animación verde fija por 2 segundos antes de volver al estado original
                 btnSincro.style.background = "#155724";
-                btnSincro.innerText = "✅ ¡Sincronizado con GitHub!";
-                console.log("✅ Éxito:", resultado);
-                setTimeout(() => {
+                btnSincro.innerText = "✅ ¡Sincronizado!";
+                setTimeout(() => { 
                     btnSincro.style.background = "#28a745";
-                    btnSincro.innerText = "💾 Sincronizar con GitHub";
-                }, 3000);
+                    btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)"; 
+                }, 2000);
             } else {
-                throw new Error(resultado.detail || `HTTP ${respuesta.status}`);
+                throw new Error();
             }
-
         } catch (error) {
-            console.error("❌ Error de sincronización:", error);
-            // Mostramos el error REAL en lugar del mensaje genérico
-            alert(`❌ Error al sincronizar:\n\n${error.message}\n\nRevisa la consola del navegador (F12) para más detalles.`);
+            alert("Error al sincronizar con el servidor local de Python.");
             btnSincro.style.background = "#28a745";
-            btnSincro.innerText = "💾 Sincronizar con GitHub";
+            btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
         } finally {
             btnSincro.disabled = false;
         }
     });
 
-    // BOTÓN AZUL: DESCARGA LOCAL
+    // BOTÓN AZUL
     document.getElementById('btn-descargar-backup').addEventListener('click', () => {
         const panelGlobal = document.getElementById('panel-guardado-local');
         panelGlobal.style.display = 'none';
@@ -171,19 +156,22 @@ Verifica que vercel.json apunte a api/index.py`);
     });
 }
 
-// Doble clic en enlaces para editar URL
+// TRUCO UNIVERSAL PARA ENLACES LARGOS
 if (modoEditarActivo) {
     document.querySelectorAll('a').forEach(enlace => {
         enlace.addEventListener('dblclick', (evento) => {
             evento.preventDefault();
-            const rutaActual = enlace.getAttribute('href') || '';
+            const rutaActual = enlace.getAttribute('href') || 'index.html';
             let nuevaRuta = prompt(`Configurar enlace:`, rutaActual);
             if (nuevaRuta !== null && nuevaRuta.trim() !== "") {
                 enlace.setAttribute('href', nuevaRuta.trim());
             }
         });
     });
+}
 
+// TRUCO EXPANDIDO: BOTONES Y BÚSQUEDAS
+if (modoEditarActivo) {
     document.querySelectorAll('button, .btn, [class*="btn"]').forEach(boton => {
         boton.setAttribute('contenteditable', 'true');
     });
@@ -191,8 +179,8 @@ if (modoEditarActivo) {
     document.querySelectorAll('input[type="text"], input[type="search"]').forEach(caja => {
         caja.addEventListener('dblclick', (evento) => {
             evento.preventDefault();
-            const textoActual = caja.getAttribute('placeholder') || '';
-            let nuevoPlaceholder = prompt(`Configurar placeholder:`, textoActual);
+            const textoSugerenciaActual = caja.getAttribute('placeholder') || '';
+            let nuevoPlaceholder = prompt(`Configurar texto de sugerencia:`, textoSugerenciaActual);
             if (nuevoPlaceholder !== null) {
                 caja.setAttribute('placeholder', nuevoPlaceholder.trim());
             }
