@@ -70,12 +70,6 @@ async def guardar_html(data: SincronizacionHTML):
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/")
-async def leer_index():
-    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
-
-# Montaje de archivos estáticos al final
-app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn

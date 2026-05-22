@@ -2,18 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "frontend/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "api/index.py",
+      "src": "servidor.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/guardar-html",
-      "dest": "api/index.py"
+      "src": "/api/(.*)",
+      "dest": "servidor.py"
     },
     {
       "src": "/(.*)",
