@@ -6,9 +6,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from github import Github
 
-app = FastAPI(title="Servidor de Producción - Alcaldía Municipal")
+app = FastAPI(title="CMS Alcaldía Municipal - Producción")
 
-# Configuración de CORS universal
+# Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,26 +17,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Rutas base físicas
+# Rutas base
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
 
 class SincronizacionHTML(BaseModel):
     archivo: str
     html: str
 
-# =============================================================================
-# EL ENDPOINT DE LA API (Debe ir arriba para que no lo tape el montaje estático)
-# =============================================================================
+
 @app.post("/api/guardar-html")
 async def guardar_html(data: SincronizacionHTML):
     archivo_limpio = os.path.basename(data.archivo)
     
-    # El interruptor que valida tus variables de Vercel
+    # Detectar si estamos en Vercel o en local
     ES_PRODUCCION = os.getenv("VERCEL") is not None or os.getenv("GITHUB_TOKEN") is not None
 
     if not ES_PRODUCCION:
-        # Modo Local (Tu PC)
+        # ====================== MODO LOCAL ======================
         ruta_destino = os.path.join(FRONTEND_DIR, archivo_limpio)
         try:
             with open(ruta_destino, "w", encoding="utf-8") as f:
@@ -44,39 +43,54 @@ async def guardar_html(data: SincronizacionHTML):
             return {"status": "success", "message": "Guardado local exitoso."}
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+
     else:
-        # Modo Nube (Vercel -> GitHub)
+        # ====================== MODO VERCEL (GitHub) ======================
         TOKEN = os.getenv("GITHUB_TOKEN")
-        REPO_NAME = "triangiarciara-eng/alcaldiamunicipal" # <-- Actualizado con tu usuario real de la captura
+        OWNER = "briangarciaara-eng"
+        REPO_NAME = "alcaldiamunicipal"
         RUTA_EN_REPO = f"frontend/{archivo_limpio}"
-        
+
         if not TOKEN:
-            raise HTTPException(status_code=500, detail="Falta GITHUB_TOKEN en Vercel.")
+            raise HTTPException(status_code=500, detail="GITHUB_TOKEN no configurado en Vercel")
+
         try:
             g = Github(TOKEN)
-            repo = g.get_repo(REPO_NAME)
+            repo = g.get_repo(f"{OWNER}/{REPO_NAME}")
+            
+            # Obtener el archivo actual para conseguir el SHA
             contents = repo.get_contents(RUTA_EN_REPO, ref="main")
             
             repo.update_file(
                 path=RUTA_EN_REPO,
-                message=f"CMS Nube: Actualización de {archivo_limpio}",
+                message=f"CMS: Actualización de {archivo_limpio}",
                 content=data.html,
                 sha=contents.sha,
                 branch="main"
             )
-            return {"status": "success", "message": "Sincronizado directamente en GitHub."}
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Error GitHub: {str(e)}")
+            
+            return {
+                "status": "success", 
+                "message": f"Archivo {archivo_limpio} actualizado en GitHub correctamente."
+            }
 
-# =============================================================================
-# RESTAURACIÓN DEL MANEJO DE ARCHIVOS ESTÁTICOS (Levanta el sitio web)
-# =============================================================================
+        except Exception as e:
+            error_msg = str(e)
+            print(f"ERROR GITHUB: {error_msg}")  # Esto se ve en los logs de Vercel
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Error al guardar en GitHub: {error_msg}"
+            )
+
+
+# ====================== SERVIR ARCHIVOS ESTÁTICOS ======================
 @app.get("/")
 async def leer_index():
     return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
-# Mapeo universal para las demás páginas (.html, .js, imágenes)
+
 app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
 
 if __name__ == "__main__":
     import uvicorn
