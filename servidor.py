@@ -47,7 +47,7 @@ async def guardar_html(data: SincronizacionHTML):
     else:
         # Modo Nube (Vercel -> GitHub)
         TOKEN = os.getenv("GITHUB_TOKEN")
-        REPO_NAME = "briangarciara-eng/alcaldiamunicipal" # <-- Actualizado con tu usuario real de la captura
+        REPO_NAME = "briangiarciara-eng/alcaldiamunicipal" # <-- Actualizado con tu usuario real de la captura
         RUTA_EN_REPO = f"frontend/{archivo_limpio}"
         
         if not TOKEN:
