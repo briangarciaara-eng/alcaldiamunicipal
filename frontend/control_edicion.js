@@ -110,7 +110,7 @@ if (!modoEditarActivo) {
         panelGlobal.style.display = 'flex';
 
         try {
-            const respuesta = await fetch('http://localhost:8000/api/guardar-html', {
+            const respuesta = await fetch('/api/guardar-html', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
