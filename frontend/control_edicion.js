@@ -36,7 +36,7 @@ function previsualizarNuevaImagen(input, idImg) {
 }
 
 // ==========================================================================
-// CONTROL DE EDICIÓN VISUAL HÍBRIDO - ALCALDÍA LOCAL MUNICIPAL
+// CONTROL DE EDICIÓN VISUAL HÍBRIDO
 // ==========================================================================
 const urlParams = new URLSearchParams(window.location.search);
 const modoEditarActivo = urlParams.get('modo') === 'editar';
@@ -50,9 +50,6 @@ if (!modoEditarActivo) {
         imagen.style.cursor = 'default';
     });
 } else {
-    // ==========================================================================
-    // MODO EDICIÓN ACTIVO: INYECTAR BOTONES DE CONTROL
-    // ==========================================================================
     const panelExistente = document.getElementById('panel-guardado-local');
     if (panelExistente) panelExistente.remove();
 
@@ -67,55 +64,43 @@ if (!modoEditarActivo) {
         </div>
     `;
 
-    if (document.body) {
-        document.body.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
-    } else {
-        document.documentElement.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
-    }
+    document.body.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
 
-    // ==========================================================================
-    // LÓGICA BOTÓN VERDE: SINCRONIZACIÓN (CORREGIDO)
-    // ==========================================================================
+    // ====================== BOTÓN SINCRONIZACIÓN ======================
     document.getElementById('btn-sincronizar-fast').addEventListener('click', async () => {
         const btnSincro = document.getElementById('btn-sincronizar-fast');
-        const panelGlobal = document.getElementById('panel-guardado-local');
 
-        // Efecto naranja original
         btnSincro.style.background = "#e0a800";
         btnSincro.innerText = "⏳ Sincronizando...";
         btnSincro.disabled = true;
 
-        panelGlobal.style.display = 'none';
-        const codigoVivoSinBotones = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-        panelGlobal.style.display = 'flex';
-
         try {
+            const codigoVivo = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+
             const respuesta = await fetch('/api/guardar-html', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    archivo: window.location.pathname.split('/').pop() || 'index.html',
-                    html: codigoVivoSinBotones
+                    archivo: 'index.html',
+                    html: codigoVivo
                 })
             });
 
             if (respuesta.ok) {
                 btnSincro.style.background = "#155724";
                 btnSincro.innerText = "✅ ¡Sincronizado!";
-                
                 setTimeout(() => {
                     btnSincro.style.background = "#28a745";
                     btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
                     btnSincro.disabled = false;
                 }, 2500);
             } else {
-                throw new Error(`Error ${respuesta.status}`);
+                throw new Error('Error del servidor');
             }
         } catch (error) {
-            console.error("Error de sincronización:", error);
+            console.error(error);
             btnSincro.style.background = "#dc3545";
-            btnSincro.innerText = "❌ Error al sincronizar";
-            
+            btnSincro.innerText = "❌ Error de conexión";
             setTimeout(() => {
                 btnSincro.style.background = "#28a745";
                 btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
@@ -124,7 +109,7 @@ if (!modoEditarActivo) {
         }
     });
 
-    // Botón de respaldo (sin cambios)
+    // Botón respaldo
     document.getElementById('btn-descargar-backup').addEventListener('click', () => {
         const contenido = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
         const blob = new Blob([contenido], { type: 'text/html' });
