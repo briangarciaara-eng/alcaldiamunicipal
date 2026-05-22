@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transparencia - Alcaldía Local Municipal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Inter:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script defer="" src="control-edicion.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#737780",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#a7c8ff",
+                      "surface-bright": "#f8f9fa",
+                      "on-background": "#191c1d",
+                      "error-container": "#ffdad6",
+                      "primary": "#001e40",
+                      "tertiary-container": "#6e000d",
+                      "on-secondary-fixed": "#271900",
+                      "on-tertiary-fixed-variant": "#930015",
+                      "on-secondary": "#ffffff",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#ffb3ae",
+                      "on-surface-variant": "#43474f",
+                      "surface-tint": "#3a5f94",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdad7",
+                      "inverse-surface": "#2e3132",
+                      "on-tertiary-fixed": "#410004",
+                      "on-surface": "#191c1d",
+                      "on-secondary-container": "#6a4b00",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary": "#7c5800",
+                      "on-tertiary-container": "#ff6c68",
+                      "on-primary-fixed-variant": "#1f477b",
+                      "tertiary": "#460005",
+                      "secondary-fixed": "#ffdea7",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-container": "#fcb812",
+                      "surface": "#f8f9fa",
+                      "inverse-primary": "#a7c8ff",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-error": "#ffffff",
+                      "surface-variant": "#e1e3e4",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-dim": "#d9dadb",
+                      "secondary-fixed-dim": "#ffbb1e",
+                      "on-primary-container": "#799dd6",
+                      "error": "#ba1a1a",
+                      "surface-container": "#edeeef",
+                      "primary-container": "#003366",
+                      "on-primary-fixed": "#001b3c",
+                      "on-secondary-fixed-variant": "#5e4200",
+                      "surface-container-high": "#e7e8e9",
+                      "primary-fixed": "#d5e3ff",
+                      "outline-variant": "#c3c6d1",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-md": "24px",
+                      "stack-sm": "12px",
+                      "base": "8px",
+                      "margin-desktop": "40px",
+                      "container-max": "1280px",
+                      "margin-mobile": "16px",
+                      "stack-lg": "48px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Montserrat"],
+                      "display-lg": ["Montserrat"],
+                      "headline-md": ["Montserrat"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Montserrat"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "caption": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 51, 102, 0.08);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-active .accordion-content {
+            max-height: 1000px;
+        }
+        .accordion-active .arrow-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-on-background docked full-width top-0 z-50 border-b border-outline-variant dark:border-outline">
+<nav class="flex justify-between items-center w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-base">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Alcaldía Local Municipal</span>
+</div>
+<div class="hidden md:flex items-center gap-stack-md">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-body-md text-body-md" href="index.html">Inicio</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-body-md text-body-md" href="servicios.html">Atención al Ciudadano</a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary font-bold pb-1 font-body-md text-body-md" href="transparencia.html">Transparencia</a>
+</div>
+<div class="flex items-center gap-stack-sm">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container-low border border-outline-variant rounded-full px-4 py-2 text-label-md focus:ring-2 focus:ring-primary outline-none w-64" placeholder="Buscar..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline">search</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded font-label-md hover:bg-primary-container hover:text-on-primary-container transition-all Active:scale-95 opacity-80">Iniciar Sesión</button>
+</div>
+</nav>
+</header>
+<main class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
+<!-- Hero & Context -->
+<section class="mb-stack-lg">
+<nav class="mb-stack-sm flex items-center gap-2 text-outline text-label-md">
+<a class="hover:text-primary" href="index.html">Inicio</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface-variant">Transparencia</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-stack-md">
+<div class="max-w-3xl">
+<h1 class="font-display-lg text-display-lg md:font-headline-lg md:text-headline-lg text-primary mb-base" contenteditable="true">Transparencia y Acceso a la Información Pública</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant" contenteditable="true">En cumplimiento de la Ley 1712 de 2014, ponemos a su disposición esta sección para garantizar el derecho al acceso a la información pública.</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-label-md hover:underline" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+<span class="material-symbols-outlined">arrow_upward</span> Volver al inicio
+                </button>
+</div>
+</section>
+<!-- Main Categories Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-stack-lg">
+<!-- Information Section -->
+<div class="md:col-span-8 bg-surface-container-lowest p-stack-md border border-outline-variant rounded-xl custom-shadow hover:border-primary transition-colors cursor-pointer group">
+<div class="flex items-start justify-between">
+<div>
+<div class="w-12 h-12 bg-primary-fixed rounded-lg flex items-center justify-center mb-stack-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-base" contenteditable="true">1. Información de la entidad</h3>
+<p class="text-on-surface-variant text-body-md" contenteditable="true">Misión, visión, funciones, organigrama, directorio de funcionarios y sedes de atención.</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">open_in_new</span>
+</div>
+</div>
+<!-- External Links Panel (Sticky-like) -->
+<div class="md:col-span-4 row-span-2 space-y-gutter">
+<div class="bg-secondary-container p-stack-md rounded-xl border border-secondary text-on-secondary-container">
+<h4 class="font-headline-md text-headline-md mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined">link</span> Portales Externos
+                    </h4>
+<ul class="space-y-stack-sm">
+<li class="">
+<a class="flex items-center justify-between p-3 bg-surface-container-lowest rounded-lg border border-outline-variant hover:border-secondary transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="font-bold text-secondary">SECOP</span>
+<span class="text-caption text-on-surface-variant">Contratación Pública</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-secondary">arrow_forward</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between p-3 bg-surface-container-lowest rounded-lg border border-outline-variant hover:border-secondary transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="font-bold text-secondary">SIGEP</span>
+<span class="text-caption text-on-surface-variant">Gestión de Empleo</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-secondary">arrow_forward</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center justify-between p-3 bg-surface-container-lowest rounded-lg border border-outline-variant hover:border-secondary transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="font-bold text-secondary">SUIT</span>
+<span class="text-caption text-on-surface-variant">Trámites y Servicios</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-secondary">arrow_forward</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="bg-surface-container-high p-stack-md rounded-xl border border-outline-variant">
+<h4 class="font-label-md text-label-md text-primary mb-stack-sm">ATENCIÓN AL CIUDADANO</h4>
+<p class="text-body-md text-on-surface-variant mb-stack-sm">¿Desea interponer una PQRSD?</p>
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md flex items-center justify-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined">forum</span> Chat Institucional
+                    </button>
+</div>
+</div>
+<!-- Regulations Section -->
+<div class="md:col-span-4 bg-surface-container-lowest p-stack-md border border-outline-variant rounded-xl custom-shadow hover:border-primary transition-colors cursor-pointer group">
+<div class="w-10 h-10 bg-primary-fixed-dim/30 rounded-lg flex items-center justify-center mb-stack-sm">
+<span class="material-symbols-outlined text-primary">gavel</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-base" contenteditable="true">2. Normativa</h3>
+<p class="text-on-surface-variant text-body-md" contenteditable="true">Decretos, acuerdos, circulares y normatividad general que rige la entidad.</p>
+</div>
+<!-- Contracting Section -->
+<div class="md:col-span-4 bg-surface-container-lowest p-stack-md border border-outline-variant rounded-xl custom-shadow hover:border-primary transition-colors cursor-pointer group">
+<div class="w-10 h-10 bg-primary-fixed-dim/30 rounded-lg flex items-center justify-center mb-stack-sm">
+<span class="material-symbols-outlined text-primary">description</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-base" contenteditable="true">3. Contratación</h3>
+<p class="text-on-surface-variant text-body-md" contenteditable="true">Plan anual de adquisiciones, convocatorias y procesos en curso.</p>
+</div>
+</section>
+<!-- Detailed Accordion Sections -->
+<section class="mb-stack-lg max-w-4xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-stack-md" contenteditable="true">Estructura Detallada</h2>
+<div class="space-y-stack-sm">
+<!-- Section 4 -->
+<div class="accordion-item border border-outline-variant rounded-lg overflow-hidden bg-surface-container-lowest accordion-active">
+<button class="w-full flex items-center justify-between p-stack-md hover:bg-surface-container-low transition-colors" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-stack-sm">
+<span class="font-bold text-primary">04</span>
+<span class="font-headline-md text-headline-md" contenteditable="true">Planeación y Presupuesto</span>
+</div>
+<span class="material-symbols-outlined arrow-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content">
+<div class="p-stack-md border-t border-outline-variant grid grid-cols-1 md:grid-cols-2 gap-4">
+<a class="p-4 border border-outline-variant rounded flex items-center gap-3 hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined text-primary">picture_as_pdf</span>
+<div>
+<p class="font-label-md" contenteditable="true">Plan de Acción Anual</p>
+<p class="text-caption" contenteditable="true">Actualizado 2024</p>
+</div>
+</a>
+<a class="p-4 border border-outline-variant rounded flex items-center gap-3 hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<div>
+<p class="font-label-md" contenteditable="true">Ejecución Presupuestal</p>
+<p class="text-caption" contenteditable="true">Reporte Trimestral</p>
+</div>
+</a>
+</div>
+</div>
+</div>
+<!-- Section 5 -->
+<div class="accordion-item border border-outline-variant rounded-lg overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-stack-md hover:bg-surface-container-low transition-colors" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-stack-sm">
+<span class="font-bold text-primary">05</span>
+<span class="font-headline-md text-headline-md" contenteditable="true">Trámites y Servicios</span>
+</div>
+<span class="material-symbols-outlined arrow-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content">
+<div class="p-stack-md border-t border-outline-variant">
+<p class="mb-4 text-on-surface-variant" contenteditable="true">Acceda a la guía de trámites municipales registrados ante el SUIT.</p>
+<div class="grid grid-cols-1 gap-2">
+<div class="p-3 bg-surface-container flex items-center justify-between rounded">
+<span class="text-body-md" contenteditable="true">Pago de Impuesto Predial</span>
+<button class="text-primary font-label-md underline">Ver Trámite</button>
+</div>
+<div class="p-3 bg-surface-container flex items-center justify-between rounded">
+<span class="text-body-md" contenteditable="true">Solicitud de Uso de Suelo</span>
+<button class="text-primary font-label-md underline">Ver Trámite</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 6 -->
+<div class="accordion-item border border-outline-variant rounded-lg overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-stack-md hover:bg-surface-container-low transition-colors" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-stack-sm">
+<span class="font-bold text-primary">06</span>
+<span class="font-headline-md text-headline-md" contenteditable="true">Participación Ciudadana</span>
+</div>
+<span class="material-symbols-outlined arrow-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content">
+<div class="p-stack-md border-t border-outline-variant">
+<p class="text-body-md text-on-surface-variant mb-4" contenteditable="true">Espacios y mecanismos para la participación ciudadana en la gestión pública.</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed text-caption rounded-full" contenteditable="true">Rendición de Cuentas</span>
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed text-caption rounded-full" contenteditable="true">Presupuesto Participativo</span>
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed text-caption rounded-full" contenteditable="true">Veedurías Ciudadanas</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 7-10 (Simplified for density) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm mt-stack-sm">
+<div class="p-stack-sm border border-outline-variant rounded-lg flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="font-bold text-primary">07</span>
+<span class="text-body-md font-semibold" contenteditable="true">Datos Abiertos</span>
+</div>
+<div class="p-stack-sm border border-outline-variant rounded-lg flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="font-bold text-primary">08</span>
+<span class="text-body-md font-semibold" contenteditable="true">Información Específica</span>
+</div>
+<div class="p-stack-sm border border-outline-variant rounded-lg flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="font-bold text-primary">09</span>
+<span class="text-body-md font-semibold" contenteditable="true">Reportes de Control</span>
+</div>
+<div class="p-stack-sm border border-outline-variant rounded-lg flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="font-bold text-primary">10</span>
+<span class="text-body-md font-semibold" contenteditable="true">Instrumentos de Gestión</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Visual Anchor / Image Context -->
+<section class="w-full h-64 relative rounded-2xl overflow-hidden mb-stack-lg border border-outline-variant">
+<img alt="Sede Institucional" class="w-full h-full object-cover cursor-pointer" data-alt="A grand colonial-style government building with white-washed walls and ornate dark wood balconies, located in a clean, sun-drenched town square in Colombia. The atmosphere is professional and historic, with a clear blue sky and soft afternoon shadows. The image captures the essence of institutional stability and transparency, featuring lush tropical greenery in the background and a pristine, well-maintained stone plaza in the foreground." id="img-hero-transparency" onclick="cambiarImagenVisual('img-hero-transparency', 'input-hero-transparency')" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ5OV5aJ4CprrTnRMqkRYy2CE3LcB0bC256fn4gyiUrSZ6Z5h2GKOMydVu_E41rcKAf1ryjMYkwggsa3y5EkezVqm-U8F6W9RRfQG1QYihsAw0EfoADgn8Nm9yX3bFIQcuwKytF2DkHM6Lb3ak9dKyq3aO4ou8K_Eq7tgZ2nyIpIY26hWnJl39xPQ77C9Nue1dqL3NyzY1iUMsnV0Jo3Mcf4QcAUH4zpLPiJYD1FQvq3QFioW8m6cJo9HLi5U6QljPdI6zri2-hdE"/>
+<input accept="image/*" class="hidden" id="input-hero-transparency" type="file"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex flex-col justify-end p-stack-md text-on-primary pointer-events-none">
+<p class="font-headline-md text-headline-md" contenteditable="true">Garantizando su derecho a saber</p>
+<p class="text-body-md opacity-90" contenteditable="true">Secretaría de Transparencia - Alcaldía Local Municipal</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container dark:bg-surface-container-highest border-t border-outline-variant dark:border-outline">
+<div class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-md flex flex-col md:flex-row justify-between items-center gap-base">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-headline-md text-headline-md text-primary dark:text-primary-fixed-dim">Alcaldía Local Municipal</span>
+<p class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant mt-2">© 2024 Alcaldía Local Municipal. Todos los derechos reservados.</p>
+</div>
+<div class="flex gap-stack-md">
+<a class="text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-all font-label-md text-label-md" href="#">Información Legal</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-all font-label-md text-label-md" href="index.html">Mapa del Sitio</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-all font-label-md text-label-md" href="#">Contacto</a>
+</div>
+</div>
+</footer>
+<!-- FAB for Support/Chat -->
+<button class="fixed bottom-6 right-6 bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center custom-shadow border-4 border-surface hover:bg-primary-container hover:text-on-primary-container transition-all z-40" style="box-shadow: 0px 4px 15px rgba(124, 88, 0, 0.4);">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">help</span>
+</button>
+<script>
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const isActive = item.classList.contains('accordion-active');
+            
+            // Close all others
+            document.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('accordion-active');
+            });
+            
+            if (!isActive) {
+                item.classList.add('accordion-active');
+            }
+        }
+
+        // Initialize first accordion
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstItem = document.querySelector('.accordion-item');
+            if (firstItem) firstItem.classList.add('accordion-active');
+        });
+    </script>
+</body></html>

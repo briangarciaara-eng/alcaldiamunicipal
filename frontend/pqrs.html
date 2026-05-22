@@ -1,0 +1,476 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Panel de Gestión PQRS - Alcaldía Local Municipal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#410004",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#fcb812",
+                    "surface-dim": "#d9dadb",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#f8f9fa",
+                    "outline": "#737780",
+                    "on-primary-container": "#799dd6",
+                    "surface-container": "#edeeef",
+                    "on-background": "#191c1d",
+                    "surface-tint": "#3a5f94",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container-low": "#f3f4f5",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#ff6c68",
+                    "outline-variant": "#c3c6d1",
+                    "secondary": "#7c5800",
+                    "surface-variant": "#e1e3e4",
+                    "on-primary-fixed-variant": "#1f477b",
+                    "primary-fixed-dim": "#a7c8ff",
+                    "on-secondary-container": "#6a4b00",
+                    "background": "#f8f9fa",
+                    "surface-bright": "#f8f9fa",
+                    "on-surface-variant": "#43474f",
+                    "tertiary": "#460005",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "tertiary-fixed": "#ffdad7",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#6e000d",
+                    "inverse-primary": "#a7c8ff",
+                    "on-tertiary-fixed-variant": "#930015",
+                    "primary-fixed": "#d5e3ff",
+                    "secondary-fixed-dim": "#ffbb1e",
+                    "primary": "#001e40",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "tertiary-fixed-dim": "#ffb3ae",
+                    "on-surface": "#191c1d",
+                    "on-secondary-fixed": "#271900",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#003366",
+                    "on-primary-fixed": "#001b3c",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-container-high": "#e7e8e9",
+                    "secondary-fixed": "#ffdea7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "margin-mobile": "16px",
+                    "stack-md": "24px",
+                    "stack-sm": "12px",
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "stack-lg": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "caption": ["Inter"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Montserrat"],
+                    "display-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f8f9fa; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c3c6d1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface fixed top-0 w-full h-20 border-b border-outline-variant z-50">
+<div class="max-w-container-max mx-auto px-margin-desktop flex justify-between items-center w-full h-full">
+<div class="flex items-center gap-base">
+<span class="font-headline-md text-headline-md font-bold text-primary">Alcaldía Local Municipal</span>
+<span class="hidden md:block h-6 w-px bg-outline-variant mx-stack-sm"></span>
+3a class="hidden md:block font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="{{DATA:SCREEN:SCREEN_7}}"3Portal Administrativo (Volver)3/a3
+</div>
+<nav class="hidden md:flex gap-gutter items-center">
+<a class="text-primary border-b-2 border-primary pb-1 font-label-md text-label-md transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_7}}">Inicio</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_5}}">Atención al Ciudadano</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_4}}">Transparencia</a>
+<div class="ml-stack-md flex items-center gap-stack-sm">
+<button class="flex items-center gap-2 px-stack-sm py-2 rounded-xl bg-primary text-on-primary hover:opacity-90 transition-all scale-95 active:scale-90">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+<span class="font-label-md text-label-md">Iniciar Sesión</span>
+</button>
+</div>
+</nav>
+</div>
+</header>
+<div class="flex min-h-screen pt-20">
+<!-- SideNavBar (Navigation Sidebar) -->
+<aside class="w-80 bg-surface-container-low border-r border-outline-variant h-[calc(100vh-80px)] sticky top-20 hidden lg:flex flex-col p-base">
+<div class="p-stack-sm mb-stack-md">
+<div class="flex items-center gap-stack-sm mb-stack-sm">
+<img alt="Asistente Virtual Chatbot" class="w-12 h-12 rounded-full object-cover border-2 border-primary-fixed" data-alt="A professional professional portrait of a municipal government official in a bright, modern office setting. The lighting is soft and natural, emphasizing a light-mode corporate aesthetic with clean white walls and subtle blue accents. The subject conveys confidence and institutional reliability, reflecting the professional standards of a government administrative portal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9QwBwB2tR2_ciftrnZTlB_8zZ2HHPZIrnlFxx_vEeH5lqbe3A8_12LfDC5YEPfM9ctTQjtJUo6LTNWcLyfIMhMNEQJpRqgSFgdRfhS2nP8E_KKTNNHiJdHie36w6iToVGhZxbIZcFInIXmW0UpWLom0DAlOi6WWFH87sQoZendaaMY6elYmMbzXSK-aPkQLMPkg7R4sUYda9HS-CfbFw3Sqtr_hPJFsDHdVUSdHtJDQYmkXs8o8S3KEHAG934nLoBpdAAc-hlrZA">
+<div>
+<h3 class="font-label-md text-label-md text-primary font-bold">Gestión PQRS</h3>
+<p class="text-caption font-caption text-on-surface-variant">Panel de Control Interno</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<div class="bg-primary-container text-on-primary-container font-bold rounded-xl p-stack-sm flex items-center gap-stack-sm cursor-pointer">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Bandeja de Entrada</span>
+</div>
+<div class="text-on-surface-variant p-stack-sm flex items-center gap-stack-sm hover:bg-surface-container-highest transition-all rounded-xl cursor-pointer">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="font-label-md text-label-md">En Trámite</span>
+</div>
+<div class="text-on-surface-variant p-stack-sm flex items-center gap-stack-sm hover:bg-surface-container-highest transition-all rounded-xl cursor-pointer">
+<span class="material-symbols-outlined">task_alt</span>
+<span class="font-label-md text-label-md">Finalizados</span>
+</div>
+<div class="h-px bg-outline-variant my-stack-md mx-stack-sm"></div>
+<div class="text-on-surface-variant p-stack-sm flex items-center gap-stack-sm hover:bg-surface-container-highest transition-all rounded-xl cursor-pointer">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Estadísticas</span>
+</div>
+<div class="text-on-surface-variant p-stack-sm flex items-center gap-stack-sm hover:bg-surface-container-highest transition-all rounded-xl cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</div>
+</nav>
+<div class="mt-auto p-stack-sm">
+<button class="w-full bg-primary-container text-on-primary-container py-stack-sm rounded-xl font-label-md text-label-md hover:opacity-90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+                    Hablar con un Humano
+                </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 px-margin-mobile md:px-margin-desktop py-stack-lg bg-surface">
+<div class="max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-stack-md mb-stack-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">Bandeja de Gestión PQRS</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Visualización y gestión de Peticiones, Quejas, Reclamos y Sugerencias de la ciudadanía local.</p>
+</div>
+<div class="flex gap-stack-sm">
+<div class="relative">
+<input class="pl-10 pr-4 py-2 bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary w-full md:w-64 transition-all" placeholder="Buscar por ID o Ciudadano..." type="text">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+</div>
+<button class="bg-white border border-outline-variant p-2 rounded-xl hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Bento-style Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-stack-lg">
+<div class="bg-white p-stack-md rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="p-2 bg-primary-container/10 text-primary rounded-lg material-symbols-outlined">inbox</span>
+<span class="text-caption font-caption text-primary bg-primary-fixed px-2 py-1 rounded-full">+12 hoy</span>
+</div>
+<div class="mt-4">
+<h4 class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">Total Pendientes</h4>
+<p class="font-display-lg text-display-lg text-primary">124</p>
+</div>
+</div>
+<div class="bg-white p-stack-md rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="p-2 bg-secondary-container/10 text-secondary rounded-lg material-symbols-outlined">pending</span>
+<span class="text-caption font-caption text-secondary bg-secondary-fixed px-2 py-1 rounded-full">En revisión</span>
+</div>
+<div class="mt-4">
+<h4 class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">En Proceso</h4>
+<p class="font-display-lg text-display-lg text-primary">45</p>
+</div>
+</div>
+<div class="bg-white p-stack-md rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="p-2 bg-on-primary-container/10 text-on-primary-container rounded-lg material-symbols-outlined">verified</span>
+<span class="text-caption font-caption text-on-primary-container bg-primary-fixed px-2 py-1 rounded-full">92% Eficacia</span>
+</div>
+<div class="mt-4">
+<h4 class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">Resueltos Mes</h4>
+<p class="font-display-lg text-display-lg text-primary">312</p>
+</div>
+</div>
+</div>
+<!-- PQRS Table View -->
+<div class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-6 py-4 font-label-md text-label-md text-primary">ID Caso</th>
+<th class="px-6 py-4 font-label-md text-label-md text-primary">Ciudadano</th>
+<th class="px-6 py-4 font-label-md text-label-md text-primary">Tipo</th>
+<th class="px-6 py-4 font-label-md text-label-md text-primary">Fecha Radicación</th>
+<th class="px-6 py-4 font-label-md text-label-md text-primary">Estado</th>
+<th class="px-6 py-4 font-label-md text-label-md text-primary text-center">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">#PQ-2024-0891</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">RM</div>
+<span class="font-body-md text-body-md text-on-surface">Ricardo Mendoza</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-caption font-caption">Queja</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">24/05/2024</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-surface-dim text-on-surface-variant text-caption font-label-md">Pendiente</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-secondary-container text-on-secondary-container px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-1">
+                                                En Proceso
+                                            </button>
+<button class="bg-on-primary-container text-on-primary text-white px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-1">
+                                                Resuelto
+                                            </button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">#PQ-2024-0892</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary font-bold text-xs">LP</div>
+<span class="font-body-md text-body-md text-on-surface">Lucía Pantoja</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-caption font-caption">Sugerencia</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">23/05/2024</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-surface-dim text-on-surface-variant text-caption font-label-md">Pendiente</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-secondary-container text-on-secondary-container px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">En Proceso</button>
+<button class="bg-on-primary-container text-on-primary text-white px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">Resuelto</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">#PQ-2024-0895</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed-dim flex items-center justify-center text-secondary font-bold text-xs">AC</div>
+<span class="font-body-md text-body-md text-on-surface">Alberto Castro</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-caption font-caption">Petición</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">22/05/2024</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-surface-dim text-on-surface-variant text-caption font-label-md">Pendiente</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-secondary-container text-on-secondary-container px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">En Proceso</button>
+<button class="bg-on-primary-container text-on-primary text-white px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">Resuelto</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">#PQ-2024-0898</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-on-primary-container/20 flex items-center justify-center text-primary font-bold text-xs">SR</div>
+<span class="font-body-md text-body-md text-on-surface">Sara Restrepo</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-caption font-caption">Denuncia</span>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">22/05/2024</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-surface-dim text-on-surface-variant text-caption font-label-md">Pendiente</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-secondary-container text-on-secondary-container px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">En Proceso</button>
+<button class="bg-on-primary-container text-on-primary text-white px-3 py-1.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">Resuelto</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center border-t border-outline-variant">
+<span class="text-caption font-caption text-on-surface-variant">Mostrando 4 de 124 casos pendientes</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-outline-variant">
+<div class="w-full py-stack-lg px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between gap-gutter">
+<div class="space-y-stack-sm">
+<span class="font-headline-sm text-headline-md font-bold text-primary">Alcaldía Local Municipal</span>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm">© 2024 Alcaldía Local Municipal - Institución de Gobierno Colombiano. Trabajando por la transparencia y eficiencia.</p>
+</div>
+<div class="grid grid-cols-2 gap-stack-lg">
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-primary uppercase">Legal</span>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" href="#">Protección de Datos</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" href="#">Mapa del Sitio</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-primary uppercase">Servicios</span>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" href="#">Trámites y Servicios</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" href="#">PQRSD</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Floating Chatbot Button -->
+<div class="fixed bottom-margin-desktop right-margin-desktop z-[100] group">
+<div class="absolute bottom-full right-0 mb-4 bg-white p-3 rounded-xl shadow-lg border border-outline-variant w-64 opacity-0 pointer-events-none translate-y-2 transition-all group-hover:opacity-100 group-hover:translate-y-0" id="chat-tooltip">
+<p class="font-label-md text-label-md text-primary font-bold mb-1">¿Necesitas ayuda con un caso?</p>
+<p class="text-caption font-caption text-on-surface-variant">El asistente virtual puede ayudarte a clasificar PQRS rápidamente.</p>
+</div>
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform duration-300 relative" onclick="toggleSideNav()">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+<span class="absolute -top-1 -right-1 w-5 h-5 bg-secondary text-on-secondary text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-surface animate-bounce">2</span>
+</button>
+</div>
+<!-- SideNavBar (Chatbot Panel Overlay) -->
+<div class="fixed right-0 top-0 h-full w-80 bg-surface-container-low border-l border-outline-variant shadow-lg z-[200] translate-x-full transition-transform duration-300 ease-in-out p-base flex flex-col" id="side-chat">
+<div class="flex justify-between items-start mb-stack-md">
+<div class="flex items-center gap-stack-sm">
+<img alt="Asistente Virtual Chatbot" class="w-10 h-10 rounded-full object-cover border-2 border-primary" data-alt="A close-up professional headshot of an administrative assistant in a modern Colombian government office. The lighting is warm and clear, emphasizing professionalism and citizen care. The style is consistent with high-end corporate identity, using a palette of white and professional blue tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGdddXdfQ69xJ79c9tTpSQq58Eqs_ck-5KYjwAwzi3xvjnBUVTnlDRevS0q_0lmWezzJ9aVjwTu1S7rLeMuBKEQI5pIov9PypqMyOjMGPf0Xa_XyVxiYGP2a4lJ4n-Km3ZQNZgVQGJnhvGuKApYkfUwcE2IXhgMFUvdcKANzmYmB9gPMHmVGA5Rdzbo7cxIUat9d8d0gwgcMVJD80UAMOdnLHb0lVgRZ-OC6iSH4RhCgF7Yu6YLpWyO9JXw5bnfEqhGJrQ5SMvYLQ">
+<div>
+<h4 class="font-label-md text-label-md text-primary font-bold leading-tight">Chat Institucional</h4>
+<p class="text-caption font-caption text-on-surface-variant">¿En qué podemos ayudarte hoy?</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary p-1" onclick="toggleSideNav()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="space-y-2 mb-stack-lg">
+<div class="bg-primary-container text-on-primary-container font-bold rounded-xl p-stack-sm flex items-center gap-stack-sm cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Preguntas Frecuentes</span>
+</div>
+<div class="text-on-surface-variant p-stack-sm flex items-center gap-stack-sm hover:bg-surface-container-highest transition-all rounded-xl cursor-pointer">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">Historial de Chat</span>
+</div>
+
+</nav>
+<div class="flex-1 bg-surface-container rounded-xl p-stack-sm overflow-y-auto custom-scrollbar">
+<div class="space-y-stack-sm">
+<div class="bg-white p-3 rounded-lg text-caption font-caption text-on-surface-variant shadow-sm border border-outline-variant max-w-[85%]">¡Hola! Soy tu asistente virtual de la Alcaldía. ¿En qué te puedo colaborar hoy con tus trámites o radicado de PQRS?</div>
+</div>
+</div>
+<div class="mt-auto pt-stack-sm">
+
+<div class="relative">
+<input class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-outline-variant focus:ring-primary focus:border-primary text-body-md" placeholder="Escribe un mensaje..." type="text">
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-primary">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+        function toggleSideNav() {
+            const sideChat = document.getElementById('side-chat');
+            const isOpen = sideChat.classList.contains('translate-x-0');
+            
+            if (isOpen) {
+                sideChat.classList.remove('translate-x-0');
+                sideChat.classList.add('translate-x-full');
+            } else {
+                sideChat.classList.remove('translate-x-full');
+                sideChat.classList.add('translate-x-0');
+            }
+        }
+
+        // Close chat on click outside
+        document.addEventListener('click', (e) => {
+            const sideChat = document.getElementById('side-chat');
+            const chatBtn = document.querySelector('button[onclick="toggleSideNav()"]');
+            
+            if (!sideChat.contains(e.target) && !chatBtn.contains(e.target) && sideChat.classList.contains('translate-x-0')) {
+                toggleSideNav();
+            }
+        });
+
+        // Atmospheric micro-interaction for rows
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.transform = 'scale(1.002)';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+
+
+
+
+</body></html>

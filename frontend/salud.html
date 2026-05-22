@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Salud Municipal - Alcaldía Local Municipal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script defer="" src="control_edicion.js"></script>
+<!-- Tailwind Theme Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-fixed-dim": "#ffbb1e",
+                "outline": "#737780",
+                "inverse-primary": "#a7c8ff",
+                "on-primary": "#ffffff",
+                "on-primary-fixed": "#001b3c",
+                "secondary": "#7c5800",
+                "on-surface-variant": "#43474f",
+                "surface-container-high": "#e7e8e9",
+                "inverse-surface": "#2e3132",
+                "on-secondary-fixed-variant": "#5e4200",
+                "on-primary-fixed-variant": "#1f477b",
+                "on-tertiary": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "surface-variant": "#e1e3e4",
+                "primary-fixed-dim": "#a7c8ff",
+                "on-tertiary-fixed-variant": "#930015",
+                "primary-fixed": "#d5e3ff",
+                "surface-dim": "#d9dadb",
+                "surface-container": "#edeeef",
+                "on-surface": "#191c1d",
+                "tertiary-fixed": "#ffdad7",
+                "secondary-container": "#fcb812",
+                "inverse-on-surface": "#f0f1f2",
+                "tertiary-fixed-dim": "#ffb3ae",
+                "on-secondary-container": "#6a4b00",
+                "on-background": "#191c1d",
+                "tertiary-container": "#6e000d",
+                "outline-variant": "#c3c6d1",
+                "on-primary-container": "#799dd6",
+                "on-secondary-fixed": "#271900",
+                "error": "#ba1a1a",
+                "on-tertiary-fixed": "#410004",
+                "surface-bright": "#f8f9fa",
+                "primary-container": "#003366",
+                "on-tertiary-container": "#ff6c68",
+                "secondary-fixed": "#ffdea7",
+                "background": "#f8f9fa",
+                "surface-tint": "#3a5f94",
+                "surface-container-highest": "#e1e3e4",
+                "on-secondary": "#ffffff",
+                "on-error": "#ffffff",
+                "surface-container-low": "#f3f4f5",
+                "surface": "#f8f9fa",
+                "on-error-container": "#93000a",
+                "tertiary": "#460005",
+                "primary": "#001e40",
+                "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "margin-mobile": "16px",
+                "base": "8px",
+                "gutter": "24px",
+                "stack-md": "24px",
+                "stack-lg": "48px",
+                "container-max": "1280px",
+                "stack-sm": "12px",
+                "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                "headline-lg-mobile": ["Montserrat"],
+                "headline-lg": ["Montserrat"],
+                "display-lg": ["Montserrat"],
+                "body-lg": ["Inter"],
+                "headline-md": ["Montserrat"],
+                "body-md": ["Inter"],
+                "caption": ["Inter"],
+                "label-md": ["Inter"]
+            },
+            "fontSize": {
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(233, 236, 239, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar (Shared Component) -->
+<nav class="bg-surface sticky top-0 z-50 border-b border-outline-variant">
+<div class="flex justify-between items-center w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-base">
+<span class="font-headline-md text-headline-md font-bold text-primary">Alcaldía Local Municipal</span>
+</div>
+<!-- Desktop Navigation -->
+<div class="hidden md:flex items-center gap-stack-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="index.html">Inicio</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="tramites.html">Atención al Ciudadano</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="transparencia.html">Transparencia</a>
+<div class="ml-stack-sm flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-body-md">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md placeholder:text-outline p-0 ml-2" placeholder="Buscar trámite..." type="text"/>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-md text-label-md hover:opacity-90 transition-all Active:scale-95">
+                Iniciar Sesión
+            </button>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
+<!-- Hero & Breadcrumb -->
+<section class="mb-stack-lg">
+<nav class="flex items-center gap-2 mb-4">
+<a class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1" href="index.html">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span> Volver al inicio
+                </a>
+<span class="text-outline">/</span>
+<span class="text-on-surface-variant font-label-md text-label-md">Módulo de Salud</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-base">
+<div>
+<h1 class="font-display-lg text-display-lg text-primary mb-2" contenteditable="true">Portal de Salud Ciudadana</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl" contenteditable="true">
+                        Accede a los servicios de salud pública, consulta puntos de atención y mantente informado sobre las jornadas de vigilancia y prevención.
+                    </p>
+</div>
+<div class="flex gap-stack-sm">
+<div class="bg-surface-container-high px-4 py-3 rounded-xl border border-outline-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+<div>
+<p class="font-caption text-caption text-on-surface-variant" contenteditable="true">Estado del Sistema</p>
+<p class="font-label-md text-label-md text-primary" contenteditable="true">Operando Normal</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Services -->
+<div class="bento-grid mb-stack-lg">
+<!-- Puntos de Atención (CAPS y Hospitales) -->
+<div class="col-span-12 md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+<div class="h-64 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer" data-alt="A stylized, clean map of a metropolitan city with medical icons indicating health points like CAPS and hospitals. The map is designed in a modern light-mode aesthetic with a professional color palette of primary blue and neutral grays, ensuring clarity and institutional trust." id="img-mapa-salud" onclick="cambiarImagenVisual('img-mapa-salud', 'input-mapa-salud')" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANMkKr1L2DN90MEBgSHxeTov44vwJ44UF07f_EAzVRQhm-YhSoH6v2s1Cly7qLVXNnzjrXb9CEHeCA48WZljaVo4QO3ZRlIryHe5_3VMaG0HmaKBanAc_SNUjanN9GS_-YePuNlFSEQvUfwjNDJU5V4cLZx1nIky_zhwwwebjfd4JNitKr2vOShKJCrkxYW2OMTfTWOzRpDU0qx_Smb-yKFDJjFbzPo5jMlCHKZ__H-mDHXVJpI7-QwtY_feyoKHWD0t8OwlJHnfo"/>
+<input accept="image/*" class="hidden" id="input-mapa-salud" onchange="actualizarImagenVisual('img-mapa-salud', this)" type="file"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-on-primary">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-caption font-label-md mb-2 inline-block" contenteditable="true">Directorio Georreferenciado</span>
+</div>
+</div>
+<div class="p-stack-md">
+<h2 class="font-headline-md text-headline-md text-primary mb-2" contenteditable="true">Directorio de Puntos de Atención</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4" contenteditable="true">Encuentra CAPS, hospitales y centros de urgencias más cercanos a tu ubicación. Consulta horarios y disponibilidad de servicios.</p>
+<div class="flex gap-stack-sm">
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md">Ver Mapa Interactivo</button>
+<button class="border border-primary text-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-low">Descargar Listado</button>
+</div>
+</div>
+</div>
+<!-- Jornadas de Vacunación -->
+<div class="col-span-12 md:col-span-4 bg-primary-container text-on-primary-container rounded-xl p-stack-md flex flex-col justify-between relative overflow-hidden">
+<div class="z-10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">vaccines</span>
+<span class="font-label-md text-label-md uppercase tracking-wider" contenteditable="true">Próximas Jornadas</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-white mb-stack-sm" contenteditable="true">Vacunación Nacional 2024</h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<div class="bg-white/10 p-2 rounded-lg text-center min-w-[48px]">
+<span class="font-bold text-white">15</span><br/><span class="text-[10px] text-white">OCT</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-white" contenteditable="true">Plaza Bolivar Central</p>
+<p class="font-caption text-caption text-primary-fixed-dim" contenteditable="true">Influenza y COVID-19</p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<div class="bg-white/10 p-2 rounded-lg text-center min-w-[48px]">
+<span class="font-bold text-white">18</span><br/><span class="text-[10px] text-white">OCT</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-white" contenteditable="true">CAPS Norte</p>
+<p class="font-caption text-caption text-primary-fixed-dim" contenteditable="true">Esquema regular niños</p>
+</div>
+</li>
+</ul>
+</div>
+<button class="mt-stack-md w-full bg-secondary-container text-on-secondary-container py-3 rounded-lg font-label-md text-label-md z-10 hover:brightness-110 transition-all">Ver Calendario Completo</button>
+<!-- Decorative background icon -->
+<span class="material-symbols-outlined absolute -bottom-10 -right-10 text-[180px] opacity-10 rotate-12">health_and_safety</span>
+</div>
+<!-- Vigilancia Epidemiológica -->
+<div class="col-span-12 md:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md shadow-sm">
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex items-center gap-3">
+<div class="bg-tertiary-fixed p-3 rounded-full">
+<span class="material-symbols-outlined text-tertiary">query_stats</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary" contenteditable="true">Vigilancia Epidemiológica</h3>
+</div>
+<span class="text-caption text-on-surface-variant italic" contenteditable="true">Actualizado hace 2h</span>
+</div>
+<div class="space-y-4 mb-stack-md">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<span class="font-body-md text-body-md" contenteditable="true">Casos Dengue (Semana 41)</span>
+<span class="font-bold text-error" contenteditable="true">12% ↓</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<span class="font-body-md text-body-md" contenteditable="true">Infecciones Respiratorias</span>
+<span class="font-bold text-secondary" contenteditable="true">Estable</span>
+</div>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
+                    Reportar evento de interés <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- Defensor del Paciente -->
+<div class="col-span-12 md:col-span-6 glass-card border border-outline-variant rounded-xl p-stack-md flex gap-stack-md items-center">
+<div class="hidden sm:block w-32 h-32 rounded-full overflow-hidden flex-shrink-0 border-4 border-surface-container-high">
+<img class="w-full h-full object-cover cursor-pointer" data-alt="A portrait of a professional and friendly healthcare ombudsman in a clean, modern medical office setting." id="img-defensor" onclick="cambiarImagenVisual('img-defensor', 'input-defensor')" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_k7VvUTnVRoS6T1WF8_eaf1DuejNCd8ZEyHKrhOBZKKCRqwDR0GpS996saysGjzI9IQdXLZf36OL5olyQmNIl31uk73PVDSiG3o-eT5xx0ORSzk-WCLn_WWY40rUw6fY5IrcnWSj_TWlPFilugrTOijMtfpnt22ggsiXDS586VqGbX7XuiVZ8P3YEqciHePuVKo0j_bi4CCScLWdqxXBuH5dVMKocSTj0C5BATBIy-wZvB5JJT9B7-51OqrzJDIJC0EobJmlZXsM"/>
+<input accept="image/*" class="hidden" id="input-defensor" onchange="actualizarImagenVisual('img-defensor', this)" type="file"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1" contenteditable="true">Defensor del Paciente</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-sm" contenteditable="true">¿Tienes problemas con tu EPS o atención médica? Protegemos tus derechos y gestionamos tus PQRS.</p>
+<div class="flex gap-stack-sm">
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md">Radicar Queja</button>
+<button class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md">Línea Púrpura</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Salud para Grupos de Interés (Horizontal Scroll on Mobile) -->
+<section class="mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-stack-md" contenteditable="true">Programas por Grupos de Interés</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Maternas -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex flex-col gap-base hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[40px] text-primary" style="font-variation-settings: 'FILL' 1;">pregnant_woman</span>
+<h3 class="font-headline-md text-headline-md text-primary" contenteditable="true">Salud Materna</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" contenteditable="true">Control prenatal, lactancia materna y red de apoyo para el cuidado del recién nacido.</p>
+</div>
+<!-- Adultos Mayores -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex flex-col gap-base hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[40px] text-primary" style="font-variation-settings: 'FILL' 1;">elderly</span>
+<h3 class="font-headline-md text-headline-md text-primary" contenteditable="true">Adultos Mayores</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" contenteditable="true">Clubes de bienestar, vacunación prioritaria y entrega domiciliaria de medicamentos.</p>
+</div>
+<!-- Jóvenes -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex flex-col gap-base hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[40px] text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<h3 class="font-headline-md text-headline-md text-primary" contenteditable="true">Salud Mental Jóvenes</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" contenteditable="true">Atención psicológica inmediata, prevención de adicciones y líneas de escucha 24/7.</p>
+</div>
+</div>
+</section>
+<!-- Documentos Abiertos (Transparencia) -->
+<section class="bg-surface-container-low rounded-xl p-stack-lg border border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md mb-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary" contenteditable="true">Centro de Documentación</h2>
+<p class="font-body-md text-body-md text-on-surface-variant" contenteditable="true">Información pública en formatos abiertos para consulta y descarga.</p>
+</div>
+<div class="flex bg-white rounded-lg p-1 border border-outline-variant">
+<button class="px-4 py-1 text-label-md font-label-md bg-primary text-on-primary rounded">Más Recientes</button>
+<button class="px-4 py-1 text-label-md font-label-md text-on-surface-variant hover:bg-surface-container">Alfabético</button>
+</div>
+</div>
+<div class="space-y-stack-sm">
+<!-- Doc 1 -->
+<div class="bg-white p-4 rounded-lg flex items-center justify-between border border-transparent hover:border-outline-variant transition-all">
+<div class="flex items-center gap-4">
+<div class="bg-error-container p-2 rounded">
+<span class="material-symbols-outlined text-error">picture_as_pdf</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary" contenteditable="true">Boletín Epidemiológico Mensual - Septiembre 2024</p>
+<p class="font-caption text-caption text-on-surface-variant" contenteditable="true">2.4 MB • PDF • 12 de Oct, 2024</p>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+<!-- Doc 2 -->
+<div class="bg-white p-4 rounded-lg flex items-center justify-between border border-transparent hover:border-outline-variant transition-all">
+<div class="flex items-center gap-4">
+<div class="bg-on-primary-fixed-variant/20 p-2 rounded">
+<span class="material-symbols-outlined text-primary">table_view</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary" contenteditable="true">Base de Datos: Puntos de Atención Municipal (CAPS)</p>
+<p class="font-caption text-caption text-on-surface-variant" contenteditable="true">156 KB • CSV • 05 de Oct, 2024</p>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+<!-- Doc 3 -->
+<div class="bg-white p-4 rounded-lg flex items-center justify-between border border-transparent hover:border-outline-variant transition-all">
+<div class="flex items-center gap-4">
+<div class="bg-error-container p-2 rounded">
+<span class="material-symbols-outlined text-error">picture_as_pdf</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary" contenteditable="true">Guía de Trámites: Afiliación Régimen Subsidiado</p>
+<p class="font-caption text-caption text-on-surface-variant" contenteditable="true">1.1 MB • PDF • 28 de Sep, 2024</p>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<div class="mt-stack-md text-center">
+<button class="text-primary font-label-md text-label-md hover:underline underline-offset-4" contenteditable="true">Cargar más documentos...</button>
+</div>
+</section>
+</main>
+<!-- FAB for Emergency -->
+<div class="fixed bottom-margin-desktop right-margin-desktop z-40">
+<button class="bg-primary text-on-primary w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all group relative">
+<span class="material-symbols-outlined text-[28px] md:text-[32px]" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<div class="absolute right-full mr-4 bg-primary text-white px-4 py-2 rounded-lg text-label-md font-label-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity" contenteditable="true">
+                Emergencias: Línea 123
+            </div>
+</button>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container border-t border-outline-variant mt-stack-lg">
+<div class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-md flex flex-col md:flex-row justify-between items-center gap-base">
+<div class="flex flex-col gap-2 items-center md:items-start">
+<span class="font-headline-md text-headline-md text-primary" contenteditable="true">Alcaldía Local Municipal</span>
+<p class="font-body-md text-body-md text-on-surface-variant" contenteditable="true">© 2024 Alcaldía Local Municipal. Todos los derechos reservados.</p>
+</div>
+<div class="flex gap-stack-md">
+<a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="index.html">Información Legal</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="index.html">Mapa del Sitio</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="index.html">Contacto</a>
+</div>
+</div>
+</footer>
+<script>
+        // Auxiliary functions for visual image editing system
+        function cambiarImagenVisual(imgId, inputId) {
+            document.getElementById(inputId).click();
+        }
+
+        function actualizarImagenVisual(imgId, input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(imgId).src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body></html>
