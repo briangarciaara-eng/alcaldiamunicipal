@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "servidor.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     },
     {
@@ -13,31 +13,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/servidor.py"
-    },
-    {
-      "src": "/frontend/(.*)",
-      "dest": "/frontend/$1"
-    },
-    {
-      "src": "/(.*\\.html)",
-      "dest": "/frontend/$1"
-    },
-    {
-      "src": "/(.*\\.js)",
-      "dest": "/frontend/$1"
-    },
-    {
-      "src": "/(.*\\.css)",
-      "dest": "/frontend/$1"
-    },
-    {
-      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf))",
-      "dest": "/frontend/$1"
-    },
-    {
-      "src": "/",
-      "dest": "/frontend/index.html"
+      "dest": "/api/index.py"
     },
     {
       "src": "/(.*)",
