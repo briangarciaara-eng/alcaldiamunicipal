@@ -1,5 +1,6 @@
 /**
  * control-edicion.js - Versión Final Corregida para Vercel
+ * Sistema de edición visual para Alcaldía Municipal
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -53,10 +54,9 @@ if (modoEditarActivo) {
     document.body.insertAdjacentHTML('beforeend', panelHTML);
 
     // ====================== BOTÓN SINCRONIZACIÓN ======================
-    const btnSincro = document.getElementById('btn-sincronizar-fast');
-    
-    btnSincro.addEventListener('click', async () => {
-        // Efecto naranja
+    document.getElementById('btn-sincronizar-fast').addEventListener('click', async () => {
+        const btnSincro = document.getElementById('btn-sincronizar-fast');
+
         btnSincro.style.background = "#e0a800";
         btnSincro.innerText = "⏳ Sincronizando...";
         btnSincro.disabled = true;
@@ -82,12 +82,15 @@ if (modoEditarActivo) {
                     btnSincro.disabled = false;
                 }, 2500);
             } else {
-                throw new Error('Error del servidor');
+                const errorText = await response.text();
+                console.error("Error servidor:", errorText);
+                throw new Error(`HTTP ${response.status}`);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error("Error completo:", error);
             btnSincro.style.background = "#dc3545";
             btnSincro.innerText = "❌ Error al sincronizar";
+            
             setTimeout(() => {
                 btnSincro.style.background = "#28a745";
                 btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
@@ -96,16 +99,15 @@ if (modoEditarActivo) {
         }
     });
 
-    // Botón de respaldo
+    // ====================== BOTÓN DE RESPALDO ======================
     document.getElementById('btn-descargar-backup').addEventListener('click', () => {
         const contenido = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
         const blob = new Blob([contenido], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
+        a.href = url;
         a.download = 'index_backup.html';
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(blob);
+        URL.revokeObjectURL(url);
     });
 }
