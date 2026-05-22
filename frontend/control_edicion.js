@@ -1,6 +1,5 @@
 /**
- * control-edicion.js
- * Sistema de edición visual rápida para la Alcaldía Local Municipal
+ * control-edicion.js - Versión Final Corregida para Vercel
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,11 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const esModoEdicion = params.get('modo') === 'editar';
 
     if (!esModoEdicion) {
-        const editables = document.querySelectorAll('[contenteditable="true"]');
-        editables.forEach(el => el.setAttribute('contenteditable', 'false'));
-
-        const imagenesEditables = document.querySelectorAll('img[onclick*="cambiarImagenVisual"]');
-        imagenesEditables.forEach(img => {
+        document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+            el.setAttribute('contenteditable', 'false');
+        });
+        document.querySelectorAll('img[onclick]').forEach(img => {
             img.removeAttribute('onclick');
             img.style.cursor = 'default';
         });
@@ -28,65 +26,54 @@ function previsualizarNuevaImagen(input, idImg) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const img = document.getElementById(idImg);
-            if (img) img.src = e.target.result;
+            document.getElementById(idImg).src = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
     }
 }
 
 // ==========================================================================
-// CONTROL DE EDICIÓN VISUAL HÍBRIDO
+// PANEL DE EDICIÓN + SINCRONIZACIÓN
 // ==========================================================================
 const urlParams = new URLSearchParams(window.location.search);
 const modoEditarActivo = urlParams.get('modo') === 'editar';
 
-if (!modoEditarActivo) {
-    document.querySelectorAll('[contenteditable="true"]').forEach(elemento => {
-        elemento.setAttribute('contenteditable', 'false');
-    });
-    document.querySelectorAll('img[onclick]').forEach(imagen => {
-        imagen.removeAttribute('onclick');
-        imagen.style.cursor = 'default';
-    });
-} else {
-    const panelExistente = document.getElementById('panel-guardado-local');
-    if (panelExistente) panelExistente.remove();
-
-    const contenedorBotonesHTML = `
-        <div id="panel-guardado-local" style="position:fixed; bottom:30px; left:30px; display:flex; gap:12px; z-index:1000; font-family:Arial, sans-serif;">
-            <button id="btn-sincronizar-fast" style="padding:12px 20px; background:#28a745; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition: background 0.2s;">
+if (modoEditarActivo) {
+    const panelHTML = `
+        <div id="panel-guardado-local" style="position:fixed; bottom:30px; left:30px; display:flex; gap:12px; z-index:10000; font-family:Arial, sans-serif;">
+            <button id="btn-sincronizar-fast" style="padding:12px 20px; background:#28a745; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s;">
                 💾 Sincronizar Tilde/Cambio (Python)
             </button>
-            <button id="btn-descargar-backup" style="padding:12px 20px; background:#007bff; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition: background 0.2s;">
+            <button id="btn-descargar-backup" style="padding:12px 20px; background:#007bff; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
                 📥 Descargar HTML Completo (Respaldo)
             </button>
         </div>
     `;
 
-    document.body.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
+    document.body.insertAdjacentHTML('beforeend', panelHTML);
 
     // ====================== BOTÓN SINCRONIZACIÓN ======================
-    document.getElementById('btn-sincronizar-fast').addEventListener('click', async () => {
-        const btnSincro = document.getElementById('btn-sincronizar-fast');
-
+    const btnSincro = document.getElementById('btn-sincronizar-fast');
+    
+    btnSincro.addEventListener('click', async () => {
+        // Efecto naranja
         btnSincro.style.background = "#e0a800";
         btnSincro.innerText = "⏳ Sincronizando...";
         btnSincro.disabled = true;
 
         try {
-            const codigoVivo = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const htmlCompleto = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
 
-            const respuesta = await fetch('/api/guardar-html', {
+            const response = await fetch('/api/guardar-html', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     archivo: 'index.html',
-                    html: codigoVivo
+                    html: htmlCompleto
                 })
             });
 
-            if (respuesta.ok) {
+            if (response.ok) {
                 btnSincro.style.background = "#155724";
                 btnSincro.innerText = "✅ ¡Sincronizado!";
                 setTimeout(() => {
@@ -98,9 +85,9 @@ if (!modoEditarActivo) {
                 throw new Error('Error del servidor');
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error:', error);
             btnSincro.style.background = "#dc3545";
-            btnSincro.innerText = "❌ Error de conexión";
+            btnSincro.innerText = "❌ Error al sincronizar";
             setTimeout(() => {
                 btnSincro.style.background = "#28a745";
                 btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
@@ -109,15 +96,16 @@ if (!modoEditarActivo) {
         }
     });
 
-    // Botón respaldo
+    // Botón de respaldo
     document.getElementById('btn-descargar-backup').addEventListener('click', () => {
         const contenido = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
         const blob = new Blob([contenido], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
+        a.href = URL.createObjectURL(blob);
         a.download = 'index_backup.html';
+        document.body.appendChild(a);
         a.click();
-        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blob);
     });
 }
