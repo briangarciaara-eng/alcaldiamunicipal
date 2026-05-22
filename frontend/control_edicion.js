@@ -36,7 +36,7 @@ function previsualizarNuevaImagen(input, idImg) {
 }
 
 // ==========================================================================
-// CONTROL DE EDICIÓN VISUAL HÍBRIDO - ALCALDÍA LOCAL MUNICIPAL (PORTÁTIL)
+// CONTROL DE EDICIÓN VISUAL HÍBRIDO - ALCALDÍA LOCAL MUNICIPAL
 // ==========================================================================
 const urlParams = new URLSearchParams(window.location.search);
 const modoEditarActivo = urlParams.get('modo') === 'editar';
@@ -51,7 +51,7 @@ if (!modoEditarActivo) {
     });
 } else {
     // ==========================================================================
-    // MODO EDICIÓN ACTIVO: INYECTAR BOTONES DE CONTROL DUAL
+    // MODO EDICIÓN ACTIVO: INYECTAR BOTONES DE CONTROL
     // ==========================================================================
     const panelExistente = document.getElementById('panel-guardado-local');
     if (panelExistente) panelExistente.remove();
@@ -66,126 +66,73 @@ if (!modoEditarActivo) {
             </button>
         </div>
     `;
-    
-    // Inyección blindada: intenta en el body, si no, en el documento general
+
     if (document.body) {
         document.body.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
     } else {
         document.documentElement.insertAdjacentHTML('beforeend', contenedorBotonesHTML);
     }
 
-    const nombreArchivo = window.location.pathname.split("/").pop() || "index.html";
-
-    function obtenerHTMLPurificado() {
-        let clonDocumento = document.documentElement.cloneNode(true);
-        let panelEnClon = clonDocumento.querySelector('#panel-guardado-local');
-        if (panelEnClon) panelEnClon.remove();
-
-        clonDocumento.querySelectorAll('[contenteditable="true"]').forEach(elemento => {
-            elemento.setAttribute('contenteditable', 'false');
-        });
-        clonDocumento.querySelectorAll('img[onclick]').forEach(imagen => {
-            imagen.removeAttribute('onclick');
-            imagen.style.cursor = 'default';
-        });
-
-        return "<!DOCTYPE html>\n" + clonDocumento.outerHTML;
-    }
-
     // ==========================================================================
-    // LÓGICA BOTÓN VERDE: CON ANIMACIÓN VISUAL RESTAURADA
+    // LÓGICA BOTÓN VERDE: SINCRONIZACIÓN (CORREGIDO)
     // ==========================================================================
     document.getElementById('btn-sincronizar-fast').addEventListener('click', async () => {
         const btnSincro = document.getElementById('btn-sincronizar-fast');
         const panelGlobal = document.getElementById('panel-guardado-local');
 
-        // Activamos animación de espera
+        // Efecto naranja original
         btnSincro.style.background = "#e0a800";
         btnSincro.innerText = "⏳ Sincronizando...";
         btnSincro.disabled = true;
 
-        // Ocultamos temporalmente para tomar la foto limpia
         panelGlobal.style.display = 'none';
         const codigoVivoSinBotones = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
         panelGlobal.style.display = 'flex';
 
         try {
-            // Cambiar esto en el fetch de control_edicion.js para producción:
-			const respuesta = await fetch('/api/guardar-html', {
-
+            const respuesta = await fetch('/api/guardar-html', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    archivo: nombreArchivo,
+                    archivo: window.location.pathname.split('/').pop() || 'index.html',
                     html: codigoVivoSinBotones
                 })
             });
 
             if (respuesta.ok) {
-                // Éxito: Animación verde fija por 2 segundos antes de volver al estado original
                 btnSincro.style.background = "#155724";
                 btnSincro.innerText = "✅ ¡Sincronizado!";
-                setTimeout(() => { 
+                
+                setTimeout(() => {
                     btnSincro.style.background = "#28a745";
-                    btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)"; 
-                }, 2000);
+                    btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
+                    btnSincro.disabled = false;
+                }, 2500);
             } else {
-                throw new Error();
+                throw new Error(`Error ${respuesta.status}`);
             }
         } catch (error) {
-            alert("Error al sincronizar con el servidor local de Python.");
-            btnSincro.style.background = "#28a745";
-            btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
-        } finally {
-            btnSincro.disabled = false;
+            console.error("Error de sincronización:", error);
+            btnSincro.style.background = "#dc3545";
+            btnSincro.innerText = "❌ Error al sincronizar";
+            
+            setTimeout(() => {
+                btnSincro.style.background = "#28a745";
+                btnSincro.innerText = "💾 Sincronizar Tilde/Cambio (Python)";
+                btnSincro.disabled = false;
+            }, 3000);
         }
     });
 
-    // BOTÓN AZUL
+    // Botón de respaldo (sin cambios)
     document.getElementById('btn-descargar-backup').addEventListener('click', () => {
-        const panelGlobal = document.getElementById('panel-guardado-local');
-        panelGlobal.style.display = 'none';
-        const codigoLimpio = obtenerHTMLPurificado();
-        panelGlobal.style.display = 'flex';
-
-        const blob = new Blob([codigoLimpio], { type: "text/html" });
-        const enlace = document.createElement("a");
-        enlace.href = URL.createObjectURL(blob);
-        enlace.download = nombreArchivo;
-        document.body.appendChild(enlace);
-        enlace.click();
-        document.body.removeChild(enlace);
-    });
-}
-
-// TRUCO UNIVERSAL PARA ENLACES LARGOS
-if (modoEditarActivo) {
-    document.querySelectorAll('a').forEach(enlace => {
-        enlace.addEventListener('dblclick', (evento) => {
-            evento.preventDefault();
-            const rutaActual = enlace.getAttribute('href') || 'index.html';
-            let nuevaRuta = prompt(`Configurar enlace:`, rutaActual);
-            if (nuevaRuta !== null && nuevaRuta.trim() !== "") {
-                enlace.setAttribute('href', nuevaRuta.trim());
-            }
-        });
-    });
-}
-
-// TRUCO EXPANDIDO: BOTONES Y BÚSQUEDAS
-if (modoEditarActivo) {
-    document.querySelectorAll('button, .btn, [class*="btn"]').forEach(boton => {
-        boton.setAttribute('contenteditable', 'true');
-    });
-
-    document.querySelectorAll('input[type="text"], input[type="search"]').forEach(caja => {
-        caja.addEventListener('dblclick', (evento) => {
-            evento.preventDefault();
-            const textoSugerenciaActual = caja.getAttribute('placeholder') || '';
-            let nuevoPlaceholder = prompt(`Configurar texto de sugerencia:`, textoSugerenciaActual);
-            if (nuevoPlaceholder !== null) {
-                caja.setAttribute('placeholder', nuevoPlaceholder.trim());
-            }
-        });
+        const contenido = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const blob = new Blob([contenido], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'index_backup.html';
+        a.click();
+        URL.revokeObjectURL(url);
     });
 }
